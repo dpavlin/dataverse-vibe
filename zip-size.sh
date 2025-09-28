@@ -23,8 +23,8 @@ find . -type f -name '*.zip' -print | while IFS= read -r zipfile; do
     # Compressed archive size (on disk)
     zipsize=$(stat -c %s "$zipfile")
 
-    # Uncompressed size inside archive
-    uncompressed=$(unzip -l "$zipfile" | awk '/^[ ]*[0-9]/ {s+=$1} END{print s}')
+    # Uncompressed size inside archive, taking only last line which include total size
+    uncompressed=$(unzip -l "$zipfile" | awk '/^[ ]*[0-9][0-9]*  *[0-9][0-9]* file/ { print $1 }')
 
     printf "%-60s %15d %12s %15d %12s\n" \
         "$zipfile" \
